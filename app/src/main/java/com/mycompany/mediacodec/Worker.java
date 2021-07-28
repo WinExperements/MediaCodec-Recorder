@@ -10,7 +10,7 @@ import android.util.*;
 import android.hardware.display.*;
 import android.media.projection.*;
 
-public class Worker extends Thread
+public class Worker
 {
 	BufferInfo mBufferInfo; // хранит информацию о текущем буфере
 	MediaCodec mEncoder; // кодер
@@ -29,7 +29,6 @@ public class Worker extends Thread
 	public void setRunning(boolean running) {
 		mRunning = running;
 	}
-	@Override
 	public void run() {
 		if (!mPrepared) {prepare();}
 		try {
