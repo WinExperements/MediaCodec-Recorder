@@ -36,7 +36,7 @@ public class RecordService extends Service
 	}
 	public void run() {
 		worker.setRunning(true);
-		worker.start();
+		worker.run();
 	}
 	public void stop() {
 		worker.setRunning(false); //its stops the worker
