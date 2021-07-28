@@ -44,4 +44,8 @@ public class RecordService extends Service
 	public Surface getSurface() {
 		return worker.mSurface;
 	}
+	public boolean isRecording() {
+		if (worker == null) {worker = new Worker();}
+		return worker.mRunning;
+	}
 }

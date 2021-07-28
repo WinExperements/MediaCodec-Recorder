@@ -8,8 +8,8 @@ android {
         applicationId "com.mycompany.mediacodec"
         minSdkVersion 21
         targetSdkVersion 22
-        versionCode 25
-        versionName "2.0b"
+        versionCode 26
+        versionName "2.1b"
     }
     buildTypes {
         release {

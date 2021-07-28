@@ -44,6 +44,8 @@ public class MainActivity extends Activity
 		heigth.setText(String.valueOf(mu.heightPixels));
 		bitrate.setText(String.valueOf(-1));
 		fps.setText(String.valueOf((int)getWindowManager().getDefaultDisplay().getRefreshRate()));
+		final SharedPreferences p = getSharedPreferences("settings",MODE_PRIVATE);
+		microsend.setText(p.getString("millsec",""));
 		conn = new ServiceConnection() {
 
 			@Override
@@ -52,6 +54,7 @@ public class MainActivity extends Activity
 				Log.i(getClass().getName(),p2.toString());
 				RecordService.MBinder b = (RecordService.MBinder)p2;
 				service = b.getService();
+				m = service.isRecording();
 			}
 
 			@Override
@@ -71,6 +74,7 @@ public class MainActivity extends Activity
 							Toast.makeText(MainActivity.this,"Microseconds must be not empty!",0).show();
 							return;
 						}
+						p.edit().putString("millsec",microsend.getText().toString()).apply();
 						service.setConfiguration(Integer.parseInt(width.getText().toString()),Integer.parseInt(heigth.getText().toString()),Integer.parseInt(fps.getText().toString()),Integer.parseInt(microsend.getText().toString()));
 						service.prepare();
 						startActivityForResult(mgr.createScreenCaptureIntent(),1000);

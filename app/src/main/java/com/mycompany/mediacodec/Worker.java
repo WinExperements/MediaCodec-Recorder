@@ -23,8 +23,10 @@ public class Worker extends Thread
 	int videoBitrate = 0; // any changes ignored :)
 	int videoFramePerSecond = 60;
 	int microseconds;
+	public static final String TAG = Worker.class.getSimpleName();
 	public Worker() {
         mBufferInfo = new BufferInfo();
+		MyLog.openLogFile("/sdcard/MediaCodecRecorder.log");
 	}
 	public void setRunning(boolean running) {
 		mRunning = running;
@@ -41,8 +43,8 @@ public class Worker extends Thread
 		}
 	}
 	void prepare() {
-		Log.i("WorkerThreadMy","Prepare");
-		Log.i("WorkerThreadMy",String.format("Configuring parameters: width=%d, heigth=%d, fps=%d, bitrate: %d, wait time for buffer: %d",width,height,videoFramePerSecond,videoBitrate,microseconds));
+		MyLog.i(TAG,"Prepare");
+		MyLog.i(TAG,String.format("Configuring parameters: width=%d, heigth=%d, fps=%d, bitrate: %d, wait time for buffer: %d",width,height,videoFramePerSecond,videoBitrate,microseconds));
         int colorFormat = MediaCodecInfo.CodecCapabilities.COLOR_FormatSurface;
         MediaFormat format = MediaFormat.createVideoFormat(MediaFormat.MIMETYPE_VIDEO_AVC, width, height);
         format.setInteger(MediaFormat.KEY_COLOR_FORMAT, colorFormat);
@@ -79,7 +81,7 @@ public class Worker extends Thread
         for (;;) {
             int status = mEncoder.dequeueOutputBuffer(mBufferInfo, microseconds);
             if (status == MediaCodec.INFO_TRY_AGAIN_LATER) {
-				Log.i("WorkerThreadMy","Buffer timeout");
+				MyLog.i(TAG,"Buffer timeout");
                 if (!mRunning) break;
             } else if (status == MediaCodec.INFO_OUTPUT_BUFFERS_CHANGED) {
                 outputBuffers = mEncoder.getOutputBuffers();
@@ -100,6 +102,7 @@ public class Worker extends Thread
                 data.limit(mBufferInfo.offset + mBufferInfo.size);
 				if (mBufferInfo.size != 0) {
 					if (!muxerStarted) {throw new RuntimeException("Muxer not started");}
+					MyLog.i(TAG,"The presentation timeus: " + mBufferInfo.presentationTimeUs);
 					muxer.writeSampleData(trackID,data,mBufferInfo);
 				}
                 mEncoder.releaseOutputBuffer(status, false);
@@ -119,5 +122,6 @@ public class Worker extends Thread
 			muxer.release();
 		}
         mSurface.release();
+		MyLog.close();
 	}
 }
