@@ -54,7 +54,7 @@ public class Worker extends Thread
 		format.setInteger(MediaFormat.KEY_BITRATE_MODE,MediaCodecInfo.EncoderCapabilities.BITRATE_MODE_CQ);
         try
 		{
-			mEncoder = MediaCodec.createEncoderByType(MediaFormat.MIME8TYPE_VIDEO_HEVC);
+			mEncoder = MediaCodec.createEncoderByType(MediaFormat.MIMETYPE_VIDEO_HEVC);
 		}
 		catch (IOException e)
 		{
